@@ -1,0 +1,65 @@
+{% extends "support/base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="auth-container">
+    <div class="auth-box">
+        <h2>Edit Profile</h2>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="auth-error">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="input-group">
+                <label>Username</label>
+                <input type="text" name="username" value="{{ user.username }}" required>
+            </div>
+
+            <div class="input-group">
+                <label>Email</label>
+                <input type="email" name="email" value="{{ user.email }}">
+            </div>
+
+            <div class="input-group">
+                <label>Profile Photo</label>
+                {% if user.profile.profile_photo %}
+                    <div style="margin-bottom:12px;">
+                        <img src="{{ user.profile.profile_photo.url }}" alt="Current Photo" style="max-width:150px; height:auto; border-radius:8px;">
+                    </div>
+                {% endif %}
+                <input type="file" name="profile_photo" accept="image/*">
+                <small style="color:#94a3b8;">JPG, PNG, GIF (max 5MB)</small>
+            </div>
+
+            <div class="input-group">
+                <label>Bio</label>
+                <textarea name="bio" rows="4">{{ user.profile.bio }}</textarea>
+                <small style="color:#94a3b8;">A short bio shown on your profile (optional)</small>
+            </div>
+
+            <div class="input-group">
+                <label>Phone Number</label>
+                <input type="text" name="phone" value="{{ user.profile.phone }}" placeholder="+1 555 555 5555" 
+                       pattern="^\+?1?\d{9,15}$|^\+?[\d\s\-()]{9,20}$"
+                       title="Enter a valid phone number (e.g., +1 555 555 5555, 555-555-5555, (555) 555-5555)">
+                <small style="color:#94a3b8;">Optional phone number for contact (e.g., +1 555 555 5555, 555-555-5555)</small>
+            </div>
+
+            <div class="input-group">
+                <label>New Password (leave blank to keep current)</label>
+                <input type="password" name="password">
+            </div>
+
+            <button type="submit" class="primary-btn">Save Changes</button>
+        </form>
+
+        <p class="auth-switch">
+            <a href="{% url 'profile' %}">Back to profile</a>
+        </p>
+    </div>
+</section>
+{% endblock %}

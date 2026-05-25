@@ -1,0 +1,97 @@
+{% extends "support/base.html" %}
+{% load static %}
+
+{% block title %}Create Ticket - ORBiS{% endblock %}
+
+{% block content %}
+<section style="max-width:760px; margin:48px auto; padding:24px;">
+    <h1 style="color:#e6e9ff; margin-bottom:12px;">Create Ticket</h1>
+    <p style="color:#94a3b8; margin-bottom:24px;">Submit a new support ticket for any of our services.</p>
+
+    <div style="background:#061427; padding:24px; border-radius:12px; border:1px solid #1e293b;">
+        <form method="POST">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+                <div style="color:#ef4444; background:#7f1d1d; padding:12px; border-radius:8px; margin-bottom:16px;">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div style="margin-bottom:18px;">
+                <label for="{{ form.title.id_for_label }}" style="color:#cbd5e1; display:block; margin-bottom:6px; font-weight:bold;">
+                    {{ form.title.label }}
+                </label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <small style="color:#ef4444;">{{ form.title.errors }}</small>
+                {% endif %}
+            </div>
+
+            <div style="margin-bottom:18px;">
+                <label for="{{ form.description.id_for_label }}" style="color:#cbd5e1; display:block; margin-bottom:6px; font-weight:bold;">
+                    {{ form.description.label }}
+                </label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <small style="color:#ef4444;">{{ form.description.errors }}</small>
+                {% endif %}
+            </div>
+
+            <div style="margin-bottom:18px;">
+                <label for="{{ form.service.id_for_label }}" style="color:#cbd5e1; display:block; margin-bottom:6px; font-weight:bold;">
+                    {{ form.service.label }}
+                </label>
+                {{ form.service }}
+                {% if form.service.errors %}
+                    <small style="color:#ef4444;">{{ form.service.errors }}</small>
+                {% endif %}
+                <small style="color:#94a3b8; display:block; margin-top:4px;">Select the service this ticket is related to</small>
+            </div>
+
+            <div style="margin-bottom:18px;">
+                <label for="{{ form.priority.id_for_label }}" style="color:#cbd5e1; display:block; margin-bottom:6px; font-weight:bold;">
+                    {{ form.priority.label }}
+                </label>
+                {{ form.priority }}
+                {% if form.priority.errors %}
+                    <small style="color:#ef4444;">{{ form.priority.errors }}</small>
+                {% endif %}
+            </div>
+
+            <div style="margin-bottom:18px;">
+                <label for="{{ form.attachment.id_for_label }}" style="color:#cbd5e1; display:block; margin-bottom:6px; font-weight:bold;">
+                    {{ form.attachment.label }}
+                </label>
+                {{ form.attachment }}
+                {% if form.attachment.errors %}
+                    <small style="color:#ef4444;">{{ form.attachment.errors }}</small>
+                {% endif %}
+                <small style="color:#94a3b8; display:block; margin-top:4px;">Optional: Attach a file (max 10MB)</small>
+            </div>
+
+            <div style="display:flex; gap:12px;">
+                <button type="submit" style="background:#6366f1; color:white; padding:10px 24px; border-radius:8px; border:none; cursor:pointer; font-weight:bold;">Create Ticket</button>
+                <a href="{% url 'tickets' %}" style="color:#94a3b8; text-decoration:none; padding:10px 24px; border-radius:8px; border:1px solid #1e293b; display:flex; align-items:center;">Cancel</a>
+            </div>
+        </form>
+    </div>
+</section>
+
+<style>
+    select, textarea, input[type="text"], input[type="email"], input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        background-color: #1a1a2e;
+        border: 1px solid #6366f1;
+        border-radius: 8px;
+        color: #e0e0e0;
+        font-family: inherit;
+    }
+    select:focus, textarea:focus, input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus {
+        outline: none;
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+</style>
+{% endblock %}

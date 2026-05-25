@@ -1,0 +1,22 @@
+{% extends 'support/base.html' %}
+{% load static %}
+
+{% block title %}Notifications - ORBiS{% endblock %}
+
+{% block content %}
+<section style="max-width:900px; margin:48px auto; padding:24px;">
+    <h1 style="color:#e6e9ff; margin-bottom:12px;">Notifications</h1>
+    <p style="color:#94a3b8; margin-bottom:24px;">Your recent notifications.</p>
+
+    <div style="background:#061427; padding:18px; border-radius:12px;">
+        {% for notification in notifications %}
+            <div style="border-bottom:1px solid rgba(255,255,255,0.03); padding:12px 0; {% if not notification.is_read %}background:#0f172a;{% endif %}">
+                <div style="color:#cbd5e1;">{{ notification.message }}</div>
+                <div style="color:#94a3b8; font-size:13px; margin-top:6px;">{{ notification.created_at|date:'M d, Y H:i' }}</div>
+            </div>
+        {% empty %}
+            <p style="color:#94a3b8;">No notifications yet.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

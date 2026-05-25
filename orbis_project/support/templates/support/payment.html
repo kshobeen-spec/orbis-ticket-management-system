@@ -1,0 +1,128 @@
+{% extends "support/base.html" %}
+
+{% block title %}Secure Payment - ORBiS{% endblock %}
+
+{% block content %}
+<div style="display:flex; align-items:center; justify-content:center; min-height:100vh; padding:24px;">
+    <div style="width:100%; max-width:500px;">
+        <!-- Payment Header -->
+        <div style="text-align:center; margin-bottom:32px;">
+            <h1 style="color:#e6e9ff; font-size:28px; margin-bottom:8px;">Secure Payment</h1>
+            <p style="color:#94a3b8;">Complete your purchase to activate the service</p>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div style="background:#7f1d1d; border-left:4px solid #ef4444; color:#fee2e2; padding:16px; border-radius:8px; margin-bottom:16px;">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if service %}
+        <!-- Service Card -->
+        <div style="background:linear-gradient(135deg, #1a1a2e 0%, #0b0b15 100%); border:1px solid #6366f1; padding:24px; border-radius:12px; margin-bottom:32px;">
+            <h3 style="color:#6366f1; margin-top:0; margin-bottom:8px;">{{ service.name }}</h3>
+            <p style="color:#cbd5e1; margin-bottom:16px; line-height:1.6;">{{ service.description }}</p>
+            
+            <div style="background:#0b0b15; padding:16px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <div style="color:#94a3b8; font-size:12px; margin-bottom:4px;">PLAN</div>
+                    <div style="color:#cbd5e1; font-weight:bold;">{{ service.get_plan_display }}</div>
+                </div>
+                <div style="text-align:right;">
+                    <div style="color:#94a3b8; font-size:12px; margin-bottom:4px;">TOTAL</div>
+                    <div style="color:#6366f1; font-size:32px; font-weight:bold;">${{ service.price|floatformat:2 }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Form -->
+        <form method="POST" action="{% url 'payment_confirm' service.id %}">
+            {% csrf_token %}
+            
+            <div style="background:#1a1a2e; border:1px solid #1e293b; padding:24px; border-radius:12px; margin-bottom:24px;">
+                <h4 style="color:#e6e9ff; margin-top:0; margin-bottom:20px;">Card Details</h4>
+                
+                <!-- Card Number -->
+                <div style="margin-bottom:16px;">
+                    <label style="color:#cbd5e1; display:block; margin-bottom:8px; font-weight:bold;">Card Number</label>
+                    <input 
+                        type="text" 
+                        name="card_number" 
+                        placeholder="1234 5678 9012 3456"
+                        maxlength="19"
+                        required
+                        style="width:100%; padding:14px; background:#0b0b15; border:1px solid #6366f1; border-radius:8px; color:#e0e0e0; font-family:inherit; font-size:16px;"
+                    >
+                    <small style="color:#94a3b8; display:block; margin-top:4px;">Any number format accepted (demo)</small>
+                </div>
+
+                <!-- Expiry & CVV -->
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px;">
+                    <div>
+                        <label style="color:#cbd5e1; display:block; margin-bottom:8px; font-weight:bold;">Expiry Date</label>
+                        <input 
+                            type="text" 
+                            name="expiry" 
+                            placeholder="MM/YY"
+                            maxlength="5"
+                            required
+                            style="width:100%; padding:14px; background:#0b0b15; border:1px solid #6366f1; border-radius:8px; color:#e0e0e0; font-family:inherit; font-size:16px;"
+                        >
+                    </div>
+                    <div>
+                        <label style="color:#cbd5e1; display:block; margin-bottom:8px; font-weight:bold;">CVV</label>
+                        <input 
+                            type="text" 
+                            name="cvv" 
+                            placeholder="123"
+                            maxlength="3"
+                            required
+                            style="width:100%; padding:14px; background:#0b0b15; border:1px solid #6366f1; border-radius:8px; color:#e0e0e0; font-family:inherit; font-size:16px;"
+                        >
+                    </div>
+                </div>
+
+                <!-- Demo Warning -->
+                <div style="background:#1a1a2e; border:1px solid #6366f1; border-radius:8px; padding:12px; margin-bottom:20px;">
+                    <div style="color:#6366f1; font-size:12px; font-weight:bold; margin-bottom:4px;">DEMO MODE</div>
+                    <p style="color:#cbd5e1; margin:0; font-size:14px;">This is a dummy payment system. Your service will be activated immediately upon submission.</p>
+                </div>
+
+                <!-- Security Info -->
+                <div style="display:flex; gap:8px; align-items:center; color:#10b981; font-size:13px;">
+                    <span>🔒</span>
+                    <span>Your payment is secure and encrypted</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:24px;">
+                <button type="submit" style="background:#6366f1; color:white; padding:16px; border:none; border-radius:8px; font-weight:bold; cursor:pointer; font-size:16px; transition:all 0.3s ease;"
+                    onmouseover="this.style.background='#4f46e5'"
+                    onmouseout="this.style.background='#6366f1'">
+                    Complete Purchase
+                </button>
+                <a href="{% url 'services' %}" style="background:#1a1a2e; color:#6366f1; border:1px solid #6366f1; padding:16px; border-radius:8px; font-weight:bold; cursor:pointer; font-size:16px; text-decoration:none; display:flex; align-items:center; justify-content:center; transition:all 0.3s ease;"
+                    onmouseover="this.style.background='#6366f1'; this.style.color='white'"
+                    onmouseout="this.style.background='#1a1a2e'; this.style.color='#6366f1'">
+                    Cancel
+                </a>
+            </div>
+
+            <!-- Trust Badges -->
+            <div style="text-align:center; color:#94a3b8; font-size:12px;">
+                <div style="margin-bottom:8px;">✓ PCI DSS Compliant • ✓ SSL Encrypted • ✓ 100% Safe</div>
+            </div>
+        </form>
+        {% else %}
+        <div style="background:#7f1d1d; border:1px solid #ef4444; color:#fee2e2; padding:24px; border-radius:12px; text-align:center;">
+            <h3 style="margin-top:0;">Service Not Found</h3>
+            <p>The service you're trying to purchase is not available.</p>
+            <a href="{% url 'services' %}" style="background:#ef4444; color:white; padding:12px 24px; border-radius:8px; text-decoration:none; display:inline-block; margin-top:12px;">Back to Services</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

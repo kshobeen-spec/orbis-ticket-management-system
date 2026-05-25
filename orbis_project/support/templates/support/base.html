@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORBiS | Support that doesn’t slow you down</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'js/main.js' %}" defer></script>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">
+        <a href="{% url 'home' %}">ORBiS</a>
+    </div>
+
+    <div class="menu">
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+            <a href="{% url 'tickets' %}">Tickets</a>
+            
+            <!-- NEW: Engineer Dashboard (for engineers/admins only) -->
+            {% if user.is_staff or user.profile.role in 'support_engineer,admin' %}
+            <a href="{% url 'engineer_dashboard' %}" style="background: #6366f1; color: white; padding: 5px 12px; border-radius: 4px;">
+                🛠️ Engineer Hub
+            </a>
+            {% endif %}
+            
+            <a href="{% url 'services' %}">Services</a>
+            <a href="{% url 'help_center' %}">Help Center</a>
+            <a href="{% url 'profile' %}">Profile</a>
+        {% else %}
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'services' %}">Services</a>
+            <a href="{% url 'help_center' %}">Help Center</a>
+            <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'login' %}" class="login-btn">Login</a>
+        {% endif %}
+
+    </div>
+</nav>
+
+
+<!-- PAGE CONTENT -->
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <p>© 2026 ORBiS. All rights reserved.</p>
+
+    <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms And Conditions</a>
+    </div>
+</footer>
+
+</body>
+</html>

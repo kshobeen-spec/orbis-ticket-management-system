@@ -1,0 +1,320 @@
+{% extends 'support/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .timeline-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .timeline-header {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        border-left: 5px solid #6366f1;
+    }
+    
+    .timeline-header h1 {
+        margin: 0 0 10px 0;
+        font-size: 28px;
+    }
+    
+    .timeline-header p {
+        margin: 5px 0;
+        color: #cbd5e1;
+        font-size: 14px;
+    }
+    
+    .ticket-reference {
+        background: rgba(99, 102, 241, 0.2);
+        padding: 10px 15px;
+        border-radius: 8px;
+        font-size: 12px;
+        margin-top: 10px;
+        border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+    
+    .timeline {
+        position: relative;
+        padding-left: 0;
+    }
+    
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: linear-gradient(180deg, #6366f1 0%, #a5b4fc 100%);
+    }
+    
+    .timeline-item {
+        margin-bottom: 30px;
+        padding-left: 40px;
+        position: relative;
+    }
+    
+    .timeline-dot {
+        position: absolute;
+        left: -8px;
+        top: 0;
+        width: 18px;
+        height: 18px;
+        background: white;
+        border: 3px solid #6366f1;
+        border-radius: 50%;
+        box-shadow: 0 0 0 2px #f9fafb;
+    }
+    
+    .timeline-content {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 20px;
+        transition: all 0.2s;
+    }
+    
+    .timeline-content:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        border-color: #6366f1;
+    }
+    
+    .timeline-action {
+        font-size: 16px;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 10px;
+    }
+    
+    .timeline-meta {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        font-size: 13px;
+        color: #6b7280;
+    }
+    
+    .meta-badge {
+        background: #f3f4f6;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-weight: 500;
+    }
+    
+    .user-name {
+        color: #6366f1;
+        font-weight: 600;
+    }
+    
+    .time-ago {
+        color: #9ca3af;
+    }
+    
+    .card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .card-header {
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #f3f4f6;
+        color: #0f172a;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #9ca3af;
+    }
+    
+    .empty-state-icon {
+        font-size: 48px;
+        margin-bottom: 15px;
+    }
+    
+    .stats-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .stat-card {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+    }
+    
+    .stat-value {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+    
+    .stat-label {
+        font-size: 12px;
+        color: #cbd5e1;
+        text-transform: uppercase;
+    }
+    
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 13px;
+        transition: all 0.2s;
+        text-decoration: none;
+    }
+    
+    .btn-secondary {
+        background: #e5e7eb;
+        color: #1f2937;
+    }
+    
+    .btn-secondary:hover {
+        background: #d1d5db;
+    }
+    
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 20px;
+        color: #6366f1;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 13px;
+        transition: all 0.2s;
+    }
+    
+    .back-link:hover {
+        gap: 12px;
+    }
+    
+    .filter-bar {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 20px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+    
+    @media (max-width: 768px) {
+        .timeline::before {
+            left: 5px;
+        }
+        
+        .timeline-item {
+            padding-left: 35px;
+        }
+        
+        .timeline-dot {
+            left: 0;
+        }
+        
+        .timeline-meta {
+            flex-direction: column;
+            gap: 5px;
+        }
+    }
+</style>
+
+<div class="timeline-container">
+    
+    <!-- BACK LINK -->
+    <a href="{% url 'engineer_ticket_details' ticket.id %}" class="back-link">
+        ← Back to Ticket Details
+    </a>
+    
+    <!-- HEADER -->
+    <div class="timeline-header">
+        <h1>📊 Activity Timeline</h1>
+        <p>Complete history of all actions and updates for this ticket</p>
+        <div class="ticket-reference">
+            <strong>Ticket:</strong> {{ ticket.ticket_code }} - {{ ticket.title }}
+        </div>
+    </div>
+    
+    <!-- STATS -->
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-value">{{ activity_logs.count }}</div>
+            <div class="stat-label">Total Activities</div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-value">
+                {% if ticket.created_at %}
+                    {% widthratio ticket.created_at|date:"U" now|date:"U" 1 %}
+                    -
+                    {{ ticket.created_at|date:"M d" }}
+                {% else %}
+                    —
+                {% endif %}
+            </div>
+            <div class="stat-label">Created</div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-value">{{ ticket.get_status_display }}</div>
+            <div class="stat-label">Current Status</div>
+        </div>
+    </div>
+    
+    <!-- TIMELINE -->
+    {% if activity_logs %}
+        <div class="timeline">
+            {% for log in activity_logs %}
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-action">{{ log.action }}</div>
+                    <div class="timeline-meta">
+                        <span class="meta-badge">
+                            <span class="user-name">{{ log.user.first_name|default:log.user.username }}</span>
+                        </span>
+                        <span class="time-ago">{{ log.created_at|date:"M d, Y H:i" }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="card">
+            <div class="empty-state">
+                <div class="empty-state-icon">📭</div>
+                <div>No activity recorded</div>
+                <small>This ticket hasn't had any actions recorded yet</small>
+            </div>
+        </div>
+    {% endif %}
+    
+    <!-- NAVIGATION -->
+    <div style="margin-top: 30px; text-align: center;">
+        <a href="{% url 'engineer_ticket_details' ticket.id %}" class="btn btn-secondary">
+            ← Return to Ticket Details
+        </a>
+    </div>
+    
+</div>
+
+{% endblock %}

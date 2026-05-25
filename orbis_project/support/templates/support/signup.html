@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ORBiS | Sign Up</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<div class="auth-container">
+    <div class="auth-box">
+
+        <h1>Create your ORBiS account</h1>
+        <p class="auth-subtext">Support. Upgrade. Simplified.</p>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="auth-error">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+    <form method="POST">
+    {% csrf_token %}
+
+    <div class="input-group">
+        <input type="text" name="username" placeholder="Username" required>
+    </div>
+
+    <div class="input-group">
+        <input type="email" name="email" placeholder="Email address" required>
+    </div>
+
+    <div class="input-group">
+        <input type="password" name="password" placeholder="Password" required>
+    </div>
+
+    <div class="input-group">
+        <input type="password" name="confirm_password" placeholder="Confirm password" required>
+    </div>
+
+    <button type="submit" class="auth-btn">SignUp</button>
+</form>
+
+        <p class="auth-switch">
+            Already have an account?
+            <a href="{% url 'login' %}">Login</a>
+            {% if error %}
+<div class="auth-error">{{ error }}</div>
+{% endif %}
+
+        </p>
+
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,205 @@
+{% extends 'support/base.html' %}
+{% load static %}
+
+{% block title %}Ticket #{{ ticket.ticket_id }} - ORBiS{% endblock %}
+
+{% block content %}
+<section class="ticket-shell">
+    <div class="ticket-topbar">
+        <div>
+            <div class="ticket-breadcrumbs">
+                <a href="{% url 'tickets' %}">← Back to tickets</a>
+                <span class="notification-pill">{{ unread_notifications }} unread</span>
+            </div>
+            <h1 class="ticket-heading">{{ ticket.ticket_id }} • {{ ticket.title }}</h1>
+            <p class="ticket-subheading">Created by {{ ticket.created_by.get_full_name|default:ticket.created_by.username }} • {{ ticket.created_at|date:'M d, Y H:i' }}</p>
+        </div>
+        <div class="ticket-status-row">
+            <span class="badge status-badge status-{{ ticket.status }}">{{ ticket.get_status_display }}</span>
+            <span class="badge priority-badge priority-{{ ticket.priority }}">{{ ticket.get_priority_display }} priority</span>
+            {% if ticket.service %}
+                <span class="badge service-pill">{{ ticket.service.name }}</span>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if messages %}
+        <div class="message-stack">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags|default:'info' }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="ticket-layout">
+        <div class="ticket-main-column">
+            <div class="section-card ticket-overview-card">
+                <div class="section-header-row">
+                    <div>
+                        <p class="eyebrow">Ticket summary</p>
+                        <h2>Issue details</h2>
+                    </div>
+                    <div class="profile-chip">
+                        <span class="profile-dot"></span>
+                        {% if user.is_staff %}Admin{% elif user.profile.role == 'support_engineer' %}Engineer{% elif user.profile.role == 'admin' %}Admin{% else %}Customer{% endif %}
+                    </div>
+                </div>
+                <div class="ticket-description">
+                    {{ ticket.description|linebreaksbr }}
+                </div>
+                {% if ticket.attachment %}
+                    <div class="attachment-banner">
+                        <span>📎 Attachment</span>
+                        <a href="{{ ticket.attachment.url }}" target="_blank" rel="noreferrer">Open attachment</a>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="section-card conversation-card">
+                <div class="section-header-row">
+                    <div>
+                        <p class="eyebrow">Conversation</p>
+                        <h2>Ticket thread</h2>
+                    </div>
+                    <span class="message-count">{{ replies.count }} message{{ replies.count|pluralize }}</span>
+                </div>
+
+                <div id="conversation-thread" class="conversation-thread">
+                    {% for reply in replies %}
+                        <div class="message-row {% if reply.sender == user %}message-row-self{% else %}message-row-other{% endif %}">
+                            <div class="message-bubble {% if reply.is_internal_note %}message-bubble-internal{% elif reply.sender == user %}message-bubble-self{% else %}message-bubble-other{% endif %}">
+                                <div class="message-header">
+                                    <div>
+                                        <strong>{{ reply.sender.get_full_name|default:reply.sender.username }}</strong>
+                                        <span class="role-pill">{{ reply.sender_role }}</span>
+                                    </div>
+                                    <span class="message-time">{{ reply.created_at|date:'M d, Y H:i' }}</span>
+                                </div>
+                                <div class="message-body">{{ reply.message|linebreaksbr }}</div>
+                                {% if reply.is_internal_note %}
+                                    <div class="internal-note-tag">Internal Note</div>
+                                {% endif %}
+                                {% if reply.attachment %}
+                                    <div class="attachment-link-row">
+                                        <span>📎</span>
+                                        <a href="{{ reply.attachment.url }}" target="_blank" rel="noreferrer">View attachment</a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="empty-state">
+                            <p>No replies yet. Start the conversation below.</p>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="reply-form-panel">
+                    <div class="section-header-row compact">
+                        <div>
+                            <p class="eyebrow">Reply</p>
+                            <h3>Send an update</h3>
+                        </div>
+                    </div>
+                    <form method="post" enctype="multipart/form-data" class="conversation-form">
+                        {% csrf_token %}
+                        <div class="form-group stacked">
+                            {{ reply_form.message }}
+                        </div>
+                        {% if reply_form.fields.is_internal_note %}
+                            <div class="internal-toggle">
+                                {{ reply_form.is_internal_note }}
+                                <label for="id_is_internal_note">Mark this as an internal note</label>
+                            </div>
+                        {% endif %}
+                        <div class="form-group stacked">
+                            {{ reply_form.attachment }}
+                        </div>
+                        <div class="reply-form-actions">
+                            <button type="submit" name="submit_reply" class="primary-btn">Send reply</button>
+                            <p class="helper-note">Public replies are visible to the customer. Internal notes stay hidden from customers.</p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <aside class="ticket-sidebar-column">
+            <div class="section-card sidebar-card">
+                <p class="eyebrow">Ticket info</p>
+                <h2>Support overview</h2>
+
+                <div class="detail-stack">
+                    <div>
+                        <p class="detail-label">Customer</p>
+                        <p class="detail-value">{{ ticket.created_by.get_full_name|default:ticket.created_by.username }}</p>
+                        <p class="detail-meta">{{ ticket.created_by.email }}</p>
+                    </div>
+                    <div>
+                        <p class="detail-label">Assigned engineer</p>
+                        <p class="detail-value">{% if ticket.assigned_to %}{{ ticket.assigned_to.get_full_name|default:ticket.assigned_to.username }}{% else %}Unassigned{% endif %}</p>
+                        <p class="detail-meta">{% if ticket.assigned_to %}{{ ticket.assigned_to.email }}{% else %}No engineer assigned yet{% endif %}</p>
+                    </div>
+                    <div>
+                        <p class="detail-label">Created</p>
+                        <p class="detail-value">{{ ticket.created_at|date:'M d, Y H:i' }}</p>
+                    </div>
+                    <div>
+                        <p class="detail-label">Last updated</p>
+                        <p class="detail-value">{{ ticket.updated_at|date:'M d, Y H:i' }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card sidebar-card">
+                <p class="eyebrow">Status controls</p>
+                <h2>Workflow</h2>
+                {% if can_manage %}
+                    <form method="post" class="workflow-form">
+                        {% csrf_token %}
+                        <label for="ticket-status" class="detail-label">Update status</label>
+                        <select id="ticket-status" name="status" class="form-control">
+                            {% for value, label in ticket.STATUS_CHOICES %}
+                                <option value="{{ value }}" {% if ticket.status == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" name="submit_status" class="secondary-btn">Save status</button>
+                    </form>
+                {% else %}
+                    <div class="readonly-status-box">
+                        <p class="detail-label">Current status</p>
+                        <p class="detail-value">{{ ticket.get_status_display }}</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            {% if can_manage %}
+                <div class="section-card sidebar-card">
+                    <p class="eyebrow">Assignment</p>
+                    <h2>Reassign ticket</h2>
+                    <form method="post" class="workflow-form">
+                        {% csrf_token %}
+                        <label for="assign_to" class="detail-label">Assign to</label>
+                        <select id="assign_to" name="assign_to" class="form-control">
+                            <option value="">Unassigned</option>
+                            {% for engineer in engineers %}
+                                <option value="{{ engineer.id }}" {% if ticket.assigned_to and ticket.assigned_to.id == engineer.id %}selected{% endif %}>{{ engineer.get_full_name|default:engineer.username }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="secondary-btn">Update assignment</button>
+                    </form>
+                </div>
+            {% endif %}
+        </aside>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const thread = document.getElementById('conversation-thread');
+        if (thread) {
+            thread.scrollTop = thread.scrollHeight;
+        }
+    });
+</script>
+{% endblock %}

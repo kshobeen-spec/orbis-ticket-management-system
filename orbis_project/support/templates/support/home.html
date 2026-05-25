@@ -1,0 +1,63 @@
+{% extends 'support/base.html' %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="hero">
+    <h1><p class="tagline">Support that doesn’t slow you down.</p>
+    </h1>
+    <h1 class="brand">ORBiS</h1>
+
+    <p>ORBiS helps individuals and organizations manage digital services, tickets, and upgrades efficiently.</p>
+    <div class="hero-buttons">
+        <button id="hero-raise" class="primary">Raise a Ticket</button>
+        <button id="hero-services" class="secondary">Explore Services</button>
+    </div>
+</section>
+
+<!-- Who ORBiS Is For -->
+<section class="who">
+    <h2>Who ORBiS Is For</h2>
+    <div class="cards">
+        <div class="card">
+            <h3>Individuals</h3>
+            <p>Personal support for cloud, email, and device-related issues.</p>
+        </div>
+        <div class="card">
+            <h3>Organizations</h3>
+            <p>Centralized IT support and service management for teams and companies.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Our Services -->
+<section class="services">
+    <h2>Our Services</h2>
+    <div class="cards">
+        <div class="card">
+            <h3>Cloud & Storage Support</h3>
+            <p>Assistance with storage usage, backups, and sync issues.</p>
+        </div>
+        <div class="card">
+            <h3>Email & Account Support</h3>
+            <p>Help with login issues, access problems, and account setup.</p>
+        </div>
+        <div class="card">
+            <h3>Device Software Support</h3>
+            <p>Support for app errors, updates, and system issues.</p>
+        </div>
+        <div class="card">
+            <h3>Security & Access Management</h3>
+            <p>Account security, permissions, and access control support.</p>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+<!-- Floating quick actions -->
+<div class="floating-actions" aria-hidden="false">
+    <button id="float-raise" class="fab" title="Raise a ticket">🎫</button>
+    <button id="float-services" class="fab" title="Browse services">☁️</button>
+    <button id="float-help" class="fab" title="Help center">❓</button>
+</div>

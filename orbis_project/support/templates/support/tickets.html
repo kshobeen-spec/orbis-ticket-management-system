@@ -1,0 +1,78 @@
+{% extends "support/base.html" %}
+{% load static %}
+
+{% block content %}
+<section style="max-width:1000px; margin:48px auto; padding:24px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+        <h1 style="color:#e6e9ff;">My Tickets</h1>
+        <div style="display:flex; gap:8px;">
+            <a href="{% url 'ticket_create' %}" class="primary-btn" style="background:#6366f1; color:white; padding:10px 14px; border-radius:8px; text-decoration:none;">Create Ticket</a>
+            <a href="{% url 'export_tickets' %}?{% for k, v in request.GET.items %}{% if k != 'page' %}{{ k }}={{ v }}&{% endif %}{% endfor %}" class="primary-btn" style="background:#10b981; color:white; padding:10px 14px; border-radius:8px; text-decoration:none;">Export CSV</a>
+        </div>
+    </div>
+
+    <div class="section">
+        <form method="GET" style="display:flex; gap:1rem; margin-bottom:1.5rem; align-items:center; flex-wrap:wrap;">
+            <select name="status" class="form-group input" style="flex:1; min-width:140px;">
+                <option value="">All Statuses</option>
+                {% for val, label in status_choices %}
+                <option value="{{ val }}" {% if current_filters.status == val %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="priority" class="form-group input" style="flex:1; min-width:140px;">
+                <option value="">All Priorities</option>
+                {% for val, label in priority_choices %}
+                <option value="{{ val }}" {% if current_filters.priority == val %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+
+            <input name="q" value="{{ current_filters.q }}" placeholder="Search tickets..." class="form-group input" style="flex:1; min-width:200px;">
+            <button type="submit" class="primary-btn">Filter</button>
+            <a href="{% url 'tickets' %}" class="primary-btn" style="background:var(--text-secondary);">Clear</a>
+        </form>
+
+        {% if tickets %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Service</th>
+                        <th>Status</th>
+                        <th>Priority</th>
+                        <th>Created</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in tickets %}
+                    <tr>
+                        <td>#{{ t.id }}</td>
+                        <td><a href="{% url 'ticket_detail' t.id %}">{{ t.title }}</a></td>
+                        <td>{% if t.service %}{{ t.service.name }}{% else %}N/A{% endif %}</td>
+                        <td><span class="badge-status badge-{{ t.status|lower }}">{{ t.get_status_display }}</span></td>
+                        <td>{{ t.get_priority_display }}</td>
+                        <td>{{ t.created_at|date:"M d, Y" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <!-- Pagination -->
+            <div style="display:flex; gap:8px; justify-content:center; margin-top:12px;">
+                {% if tickets.has_previous %}
+                    <a href="?{% for k, v in request.GET.items %}{% if k != 'page' %}{{ k }}={{ v }}&{% endif %}{% endfor %}page={{ tickets.previous_page_number }}" style="color:#cbd5e1;">← Prev</a>
+                {% endif %}
+
+                <span style="color:#94a3b8;">Page {{ tickets.number }} of {{ tickets.paginator.num_pages }}</span>
+
+                {% if tickets.has_next %}
+                    <a href="?{% for k, v in request.GET.items %}{% if k != 'page' %}{{ k }}={{ v }}&{% endif %}{% endfor %}page={{ tickets.next_page_number }}" style="color:#cbd5e1;">Next →</a>
+                {% endif %}
+            </div>
+        {% else %}
+            <p style="color:#94a3b8;">You haven't raised any tickets yet.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

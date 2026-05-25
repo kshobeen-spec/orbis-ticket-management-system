@@ -1,0 +1,215 @@
+{% extends "support/base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="dashboard-wrap" style="padding:48px; max-width:1100px; margin:48px auto;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+        <h1 style="color:#e6e9ff;">Dashboard</h1>
+        <div style="display:flex; gap:8px;">
+            <a href="?timeframe=7" style="color:{% if timeframe == '7' %}#6366f1{% else %}#94a3b8{% endif %}; text-decoration:none;">7d</a>
+            <a href="?timeframe=30" style="color:{% if timeframe == '30' %}#6366f1{% else %}#94a3b8{% endif %}; text-decoration:none;">30d</a>
+            <a href="?timeframe=90" style="color:{% if timeframe == '90' %}#6366f1{% else %}#94a3b8{% endif %}; text-decoration:none;">90d</a>
+        </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px;">
+        <div class="metric-card">
+            <small>Open Tickets</small>
+            <h2>{{ metrics.open_tickets }}</h2>
+        </div>
+        <div class="metric-card">
+            <small>In Progress</small>
+            <h2>{{ metrics.in_progress }}</h2>
+        </div>
+        <div class="metric-card">
+            <small>Resolved</small>
+            <h2>{{ metrics.resolved }}</h2>
+        </div>
+        <div class="metric-card">
+            <small>Purchased Services</small>
+            <h2>{{ metrics.purchased_services }}</h2>
+        </div>
+    </div>
+
+    <!-- Cloud Storage Status & Services Info -->
+    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-bottom:28px;">
+        <div style="background:#0b2617; border-left:4px solid #10b981; padding:16px; border-radius:8px;">
+            <h4 style="color:#10b981; margin:0 0 8px 0;">Cloud Storage Status</h4>
+            <p style="color:#cbd5e1; margin:0;">
+                <strong>{{ metrics.cloud_storage_status }}</strong>
+                {% if cloud_storage_purchased %}
+                    <span style="color:#10b981; display:block; margin-top:4px;">✓ You have access to 500GB encrypted cloud storage</span>
+                {% else %}
+                    <span style="color:#94a3b8; display:block; margin-top:4px;">
+                        <a href="{% url 'services' %}" style="color:#6366f1; text-decoration:none;">Purchase Cloud Storage →</a>
+                    </span>
+                {% endif %}
+            </p>
+        </div>
+        <div style="background:#1a0b20; border-left:4px solid #6366f1; padding:16px; border-radius:8px;">
+            <h4 style="color:#6366f1; margin:0 0 8px 0;">Your Services</h4>
+            <p style="color:#cbd5e1; margin:0;">
+                You have <strong>{{ metrics.purchased_services }}</strong> purchased service(s)
+                {% if metrics.purchased_services == 0 %}
+                    <span style="color:#94a3b8; display:block; margin-top:4px;">
+                        <a href="{% url 'services' %}" style="color:#6366f1; text-decoration:none;">Browse services →</a>
+                    </span>
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    <div style="display:flex; gap:20px; align-items:flex-start;">
+        <div style="flex:2; background:#061027; padding:20px; border-radius:12px;">
+            <h3 style="color:#e6e9ff; margin:0 0 12px 0;">Recent Tickets</h3>
+            <div style="margin-bottom:18px; display:flex; gap:12px; align-items:center;">
+                <div style="flex:1;">
+                    <small style="color:#94a3b8;">Ticket counts</small>
+                    <h2 style="color:#fff; margin:6px 0;">{{ metrics.total_tickets }}</h2>
+                </div>
+                <div style="flex:3;">
+                    <!-- Status breakdown boxes -->
+                    <div style="display:flex; gap:8px; margin-top:8px; color:#cbd5e1;">
+                        {% for label, value in status_breakdown.items %}
+                        <div style="flex:1; background:#04122a; padding:8px; border-radius:8px; text-align:center;">
+                            <div style="color:#94a3b8; font-size:12px;">{{ label }}</div>
+                            <div style="color:#fff; font-weight:600;">{{ value }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <table style="width:100%; border-collapse:collapse; color:#cbd5e1;">
+                <thead>
+                    <tr style="text-align:left; color:#94a3b8; font-size:14px;">
+                        <th style="padding:8px 6px;">Ticket</th>
+                        <th>Title</th>
+                        <th>Status</th>
+                        <th>Priority</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in recent_tickets %}
+                    <tr style="border-top:1px solid rgba(255,255,255,0.03);">
+                        <td style="padding:10px 6px;">
+                            <div style="font-weight:700; color:#fff;">Ticket #{{ t.user_ticket_number }}</div>
+                            <div style="font-size:12px; color:#94a3b8;">(ID: {{ t.ticket_code }})</div>
+                        </td>
+                        <td>{{ t.title }}</td>
+                        <td>{{ t.status }}</td>
+                        <td>{{ t.priority }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4" style="padding:12px; color:#94a3b8;">No recent tickets</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <aside style="flex:1; background:#061427; padding:20px; border-radius:12px;">
+            <h3 style="color:#e6e9ff; margin-top:0;">Quick Actions</h3>
+            <ul style="list-style:none; padding:0; margin:12px 0 0 0; color:#cbd5e1;">
+                <li style="margin-bottom:10px;"><a href="{% url 'ticket_create' %}" style="color:#6366f1; text-decoration:none;">Create Ticket</a></li>
+                <li style="margin-bottom:10px;"><a href="{% url 'tickets' %}" style="color:#6366f1; text-decoration:none;">View All Tickets</a></li>
+                <li style="margin-bottom:10px;"><a href="{% url 'services' %}" style="color:#6366f1; text-decoration:none;">View Services</a></li>
+            </ul>
+            <div style="margin-top:20px;">
+                <h4 style="color:#e6e9ff; margin-bottom:8px;">Ticket Analytics</h4>
+                {{ status_breakdown|json_script:"status-data" }}
+                {{ priority_breakdown|json_script:"priority-data" }}
+                {{ timeseries_data|json_script:"timeseries-data" }}
+                <div style="height:160px; margin-bottom:12px;">
+                    <canvas id="timeseriesChart" style="width:100%; height:100%; background:transparent;"></canvas>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:12px;">
+                    <div style="height:160px;">
+                        <canvas id="statusChart" style="width:100%; height:100%; background:transparent;"></canvas>
+                    </div>
+                    <div style="height:160px;">
+                        <canvas id="priorityChart" style="width:100%; height:100%; background:transparent;"></canvas>
+                    </div>
+                </div>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+                <script>
+                    (function(){
+                        const status = JSON.parse(document.getElementById('status-data').textContent || '{}');
+                        const priority = JSON.parse(document.getElementById('priority-data').textContent || '{}');
+                        const timeseries = JSON.parse(document.getElementById('timeseries-data').textContent || '{}');
+
+                        // Time-series chart
+                        const tsLabels = Object.keys(timeseries);
+                        const tsValues = Object.values(timeseries);
+                        const tsCtx = document.getElementById('timeseriesChart').getContext('2d');
+                        new Chart(tsCtx, {
+                            type: 'line',
+                            data: {
+                                labels: tsLabels,
+                                datasets: [{
+                                    label: 'Tickets Created',
+                                    data: tsValues,
+                                    borderColor: '#6366f1',
+                                    backgroundColor: 'rgba(99,102,241,0.1)',
+                                    tension: 0.4,
+                                    fill: true
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: { x: { ticks: { color: '#cbd5e1' } }, y: { ticks: { color: '#cbd5e1' }, beginAtZero: true } },
+                                plugins: { legend: { labels: { color: '#cbd5e1' } } }
+                            }
+                        });
+
+                        // Status doughnut chart
+                        const statusLabels = Object.keys(status);
+                        const statusValues = Object.values(status);
+                        const statusCtx = document.getElementById('statusChart').getContext('2d');
+                        new Chart(statusCtx, {
+                            type: 'doughnut',
+                            data: {
+                                labels: statusLabels,
+                                datasets: [{
+                                    data: statusValues,
+                                    backgroundColor: ['#f97316','#6366f1','#10b981','#64748b'],
+                                    hoverOffset: 6
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: { position: 'bottom', labels: { color: '#cbd5e1' } }
+                                }
+                            }
+                        });
+
+                        // Priority bar chart
+                        const priorityLabels = Object.keys(priority);
+                        const priorityValues = Object.values(priority);
+                        const priorityCtx = document.getElementById('priorityChart').getContext('2d');
+                        new Chart(priorityCtx, {
+                            type: 'bar',
+                            data: {
+                                labels: priorityLabels,
+                                datasets: [{
+                                    label: 'Tickets',
+                                    data: priorityValues,
+                                    backgroundColor: ['#60a5fa','#a78bfa','#fb7185']
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: { x: { ticks: { color: '#cbd5e1' } }, y: { ticks: { color: '#cbd5e1' }, beginAtZero: true } },
+                                plugins: { legend: { display: false } }
+                            }
+                        });
+                    })();
+                </script>
+            </div>
+        </aside>
+    </div>
+
+</section>
+{% endblock %}

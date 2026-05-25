@@ -1,0 +1,135 @@
+{% extends 'support/base.html' %}
+{% load static %}
+
+{% block title %}Admin Dashboard - ORBiS{% endblock %}
+
+{% block content %}
+<section style="max-width:1100px; margin:40px auto; padding:20px;">
+    <h1 style="color:#e6e9ff;">Admin Dashboard</h1>
+    <div class="stats-grid">
+        <div class="metric-card">
+            <small>Total Tickets</small>
+            <h2>{{ total }}</h2>
+        </div>
+        <div class="metric-card">
+            <small>Open</small>
+            <h2>{{ open_count }}</h2>
+        </div>
+        <div class="metric-card">
+            <small>In Progress</small>
+            <h2>{{ in_progress }}</h2>
+        </div>
+        <div class="metric-card">
+            <small>Closed</small>
+            <h2>{{ closed }}</h2>
+        </div>
+    </div>
+
+    <div style="margin-top:24px; background:#041122; padding:12px; border-radius:8px;">
+        <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:flex-start;">
+            <div style="flex:1 1 360px; min-width:320px;">
+                <h3 style="color:#e6e9ff; margin:6px 0 12px;">Status Breakdown</h3>
+                <canvas id="statusChart" width="400" height="250" style="background:#061427; padding:12px; border-radius:8px;"></canvas>
+            </div>
+            <div style="flex:1 1 420px; min-width:320px;">
+                <h3 style="color:#e6e9ff; margin:6px 0 12px;">Engineer Workload</h3>
+                <canvas id="workloadChart" width="400" height="250" style="background:#061427; padding:12px; border-radius:8px;"></canvas>
+            </div>
+        </div>
+
+        <div style="margin-top:18px;">
+            <h2 style="color:#e6e9ff; margin:6px 0 12px;">Recent Tickets</h2>
+            <form method="get" style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+                <select name="status" style="background:#041122; color:#e6eef8; padding:8px; border-radius:6px; border:1px solid rgba(255,255,255,0.03);">
+                    <option value="">All statuses</option>
+                    {% for val,label in ticket.STATUS_CHOICES %}
+                        <option value="{{ val }}" {% if current_filters.status == val %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+                <select name="service" style="background:#041122; color:#e6eef8; padding:8px; border-radius:6px; border:1px solid rgba(255,255,255,0.03);">
+                    <option value="">All services</option>
+                    {% for s in services %}
+                        <option value="{{ s.id }}" {% if current_filters.service == s.id|stringformat:"s" %}selected{% endif %}>{{ s.name }}</option>
+                    {% endfor %}
+                </select>
+                <select name="assignee" style="background:#041122; color:#e6eef8; padding:8px; border-radius:6px; border:1px solid rgba(255,255,255,0.03);">
+                    <option value="">All assignees</option>
+                    {% for u in engineers %}
+                        <option value="{{ u.id }}" {% if current_filters.assignee == u.id|stringformat:"s" %}selected{% endif %}>{{ u.username }} ({{ u.assigned }})</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" style="background:#6366f1; color:white; padding:8px 12px; border-radius:6px; border:none;">Filter</button>
+            </form>
+
+            <table style="width:100%; border-collapse:collapse; color:#cbd5e1;">
+                <thead style="color:#94a3b8; text-align:left; font-size:13px;">
+                    <tr>
+                        <th style="padding:10px;">ID</th>
+                        <th>User</th>
+                        <th>Email</th>
+                        <th>Service</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Created</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in recent %}
+                    <tr style="border-top:1px solid rgba(255,255,255,0.03);">
+                        <td style="padding:10px;">#{{ t.id }}</td>
+                        <td>{{ t.created_by.username }}</td>
+                        <td>{{ t.created_by.email|default:'—' }}</td>
+                        <td>{{ t.service.name if t.service else '—' }}</td>
+                        <td>{{ t.get_priority_display }}</td>
+                        <td>{{ t.get_status_display }}</td>
+                        <td>{{ t.created_at|date:'Y-m-d H:i' }}</td>
+                        <td style="text-align:right;"><a href="{% url 'admin_ticket_detail' t.id %}" style="color:#6366f1; text-decoration:none;">Open</a></td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="8" style="padding:12px; color:#94a3b8;">No tickets found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  (function(){
+    try {
+      var statusData = {{ status_counts_json|safe }};
+      var labels = Object.keys(statusData);
+      var values = labels.map(function(l){ return statusData[l]; });
+
+      var ctx = document.getElementById('statusChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: { labels: labels, datasets:[{ data: values, backgroundColor:['#ef4444','#f59e0b','#10b981'] }]},
+        options: { plugins: { legend:{ labels:{ color:'#cbd5e1' } } }
+      });
+
+      // workload chart
+      var workloadLabels = [
+        {% for u in workload %}
+          '{{ u.username }}'{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+      ];
+      var workloadValues = [
+        {% for u in workload %}
+          {{ u.assigned }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+      ];
+      var ctx2 = document.getElementById('workloadChart').getContext('2d');
+      new Chart(ctx2, {
+        type: 'bar',
+        data: { labels: workloadLabels, datasets:[{ label:'Assigned tickets', data: workloadValues, backgroundColor:'#6366f1' }]},
+        options: { scales:{ x:{ ticks:{ color:'#cbd5e1' } }, y:{ ticks:{ color:'#cbd5e1' } } }, plugins:{ legend:{ display:false } } }
+      });
+    } catch(e){ console.warn(e); }
+  })();
+</script>
+{% endblock %}

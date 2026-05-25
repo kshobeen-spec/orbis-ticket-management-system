@@ -1,0 +1,132 @@
+{% extends "support/base.html" %}
+
+{% block title %}Help Center{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div style="max-width:1100px; margin:0 auto;">
+        <!-- Hero Section -->
+        <div style="text-align:center; margin-bottom:48px;">
+            <h1 style="color:#e6e9ff; font-size:36px; margin-bottom:12px;">Help Center</h1>
+            <p style="color:#94a3b8; font-size:18px;">We're here to help. Get answers or send us a message.</p>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start;">
+            <!-- Contact Section -->
+            <div>
+                <div style="background:#1a1a2e; padding:32px; border-radius:12px; border:1px solid #6366f1;">
+                    <h2 style="color:#6366f1; margin-top:0;">Get in Touch</h2>
+                    <p style="color:#cbd5e1; margin-bottom:16px;">Have a question? Send us an email and we'll respond as soon as possible.</p>
+                    
+                    <div style="background:#0b0b15; padding:20px; border-radius:8px; margin-bottom:24px;">
+                        <div style="color:#94a3b8; font-size:12px; margin-bottom:8px;">EMAIL</div>
+                        <a href="mailto:support@orbis.com" style="color:#6366f1; font-size:18px; font-weight:bold; text-decoration:none;">support@orbis.com</a>
+                    </div>
+
+                    <div style="color:#cbd5e1; font-size:14px; line-height:1.6;">
+                        <p><strong>Response time:</strong> Within 24 hours</p>
+                        <p><strong>Availability:</strong> Monday - Friday, 9 AM - 6 PM (UTC)</p>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div style="background:#1a1a2e; padding:32px; border-radius:12px; border:1px solid #1e293b; margin-top:24px;">
+                    <h3 style="color:#e6e9ff; margin-top:0;">Send a Message</h3>
+                    
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div style="background:#065f46; border-left:4px solid #10b981; padding:16px; border-radius:8px; margin-bottom:16px; color:#d1fae5;">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="POST" action="{% url 'help_submit' %}">
+                        {% csrf_token %}
+                        <div style="margin-bottom:16px;">
+                            <label style="color:#cbd5e1; display:block; margin-bottom:6px; font-weight:bold;">Name</label>
+                            <input type="text" name="name" required style="width:100%; padding:12px; background:#0b0b15; border:1px solid #6366f1; border-radius:8px; color:#e0e0e0; font-family:inherit;">
+                        </div>
+                        
+                        <div style="margin-bottom:16px;">
+                            <label style="color:#cbd5e1; display:block; margin-bottom:6px; font-weight:bold;">Email</label>
+                            <input type="email" name="email" required style="width:100%; padding:12px; background:#0b0b15; border:1px solid #6366f1; border-radius:8px; color:#e0e0e0; font-family:inherit;">
+                        </div>
+                        
+                        <div style="margin-bottom:16px;">
+                            <label style="color:#cbd5e1; display:block; margin-bottom:6px; font-weight:bold;">Message</label>
+                            <textarea name="message" rows="6" required style="width:100%; padding:12px; background:#0b0b15; border:1px solid #6366f1; border-radius:8px; color:#e0e0e0; font-family:inherit; resize:vertical;"></textarea>
+                        </div>
+                        
+                        <button type="submit" style="width:100%; background:#6366f1; color:white; padding:12px; border:none; border-radius:8px; font-weight:bold; cursor:pointer; font-size:16px;">Send Message</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div>
+                <h2 style="color:#e6e9ff; margin-top:0; margin-bottom:24px;">Frequently Asked Questions</h2>
+                
+                <div style="display:flex; flex-direction:column; gap:16px;">
+                    <!-- FAQ Item 1 -->
+                    <details style="background:#1a1a2e; border:1px solid #1e293b; border-radius:8px; padding:16px; cursor:pointer; transition:all 0.3s ease;">
+                        <summary style="color:#6366f1; font-weight:bold; font-size:15px; user-select:none;">How do I create a support ticket?</summary>
+                        <p style="color:#cbd5e1; margin-top:12px; margin-bottom:0;">Log in to your account, go to Tickets → Create Ticket, fill in the required information including service type, and submit. Your ticket will be tracked in real-time.</p>
+                    </details>
+
+                    <!-- FAQ Item 2 -->
+                    <details style="background:#1a1a2e; border:1px solid #1e293b; border-radius:8px; padding:16px; cursor:pointer; transition:all 0.3s ease;">
+                        <summary style="color:#6366f1; font-weight:bold; font-size:15px; user-select:none;">How do I purchase a service?</summary>
+                        <p style="color:#cbd5e1; margin-top:12px; margin-bottom:0;">Go to Services, click "Buy Service" on any service card, fill in the dummy payment form, and click "Complete Purchase". Your service is activated immediately.</p>
+                    </details>
+
+                    <!-- FAQ Item 3 -->
+                    <details style="background:#1a1a2e; border:1px solid #1e293b; border-radius:8px; padding:16px; cursor:pointer; transition:all 0.3s ease;">
+                        <summary style="color:#6366f1; font-weight:bold; font-size:15px; user-select:none;">What is Cloud Storage and how do I use it?</summary>
+                        <p style="color:#cbd5e1; margin-top:12px; margin-bottom:0;">Cloud Storage provides 500GB of encrypted storage with collaboration features. Purchase it from Services, then create tickets for any storage-related support needs.</p>
+                    </details>
+
+                    <!-- FAQ Item 4 -->
+                    <details style="background:#1a1a2e; border:1px solid #1e293b; border-radius:8px; padding:16px; cursor:pointer; transition:all 0.3s ease;">
+                        <summary style="color:#6366f1; font-weight:bold; font-size:15px; user-select:none;">Can I upload a profile photo?</summary>
+                        <p style="color:#cbd5e1; margin-top:12px; margin-bottom:0;">Yes! Go to Profile → Edit Profile to upload or change your profile photo. We support JPG, PNG, and GIF formats up to 5MB.</p>
+                    </details>
+
+                    <!-- FAQ Item 5 -->
+                    <details style="background:#1a1a2e; border:1px solid #1e293b; border-radius:8px; padding:16px; cursor:pointer; transition:all 0.3s ease;">
+                        <summary style="color:#6366f1; font-weight:bold; font-size:15px; user-select:none;">What services does ORBiS offer?</summary>
+                        <p style="color:#cbd5e1; margin-top:12px; margin-bottom:0;">ORBiS offers IT Support, Customer Support Desk, Software Maintenance, Website Management, Cloud & Hosting Support, Technical Consultation, and Cloud Storage.</p>
+                    </details>
+
+                    <!-- FAQ Item 6 -->
+                    <details style="background:#1a1a2e; border:1px solid #1e293b; border-radius:8px; padding:16px; cursor:pointer; transition:all 0.3s ease;">
+                        <summary style="color:#6366f1; font-weight:bold; font-size:15px; user-select:none;">Do I need an account to access Help Center?</summary>
+                        <p style="color:#cbd5e1; margin-top:12px; margin-bottom:0;">No! Help Center is accessible to everyone. You can browse our FAQ and submit inquiries without logging in.</p>
+                    </details>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    details summary::-webkit-details-marker {
+        display: none;
+    }
+    
+    details summary::before {
+        content: "▶ ";
+        color: #6366f1;
+        margin-right: 8px;
+    }
+    
+    details[open] summary::before {
+        content: "▼ ";
+    }
+    
+    details[open] {
+        background: #0b0b15 !important;
+        border-color: #6366f1 !important;
+    }
+</style>
+{% endblock %}

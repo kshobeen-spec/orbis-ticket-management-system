@@ -1,0 +1,25 @@
+{% extends 'support/base.html' %}
+{% load static %}
+
+{% block title %}Activity Logs - ORBiS{% endblock %}
+
+{% block content %}
+<section style="max-width:900px; margin:48px auto; padding:24px;">
+    <h1 style="color:#e6e9ff; margin-bottom:12px;">Activity Logs</h1>
+    <p style="color:#94a3b8; margin-bottom:24px;">Recent activity in the system.</p>
+
+    <div style="background:#061427; padding:18px; border-radius:12px;">
+        {% for log in logs %}
+            <div style="border-bottom:1px solid rgba(255,255,255,0.03); padding:12px 0;">
+                <div style="color:#cbd5e1;">{{ log.user.username }} - {{ log.action }}</div>
+                {% if log.ticket %}
+                <div style="color:#94a3b8; font-size:13px;">Ticket: {{ log.ticket.ticket_id }}</div>
+                {% endif %}
+                <div style="color:#94a3b8; font-size:13px; margin-top:6px;">{{ log.created_at|date:'M d, Y H:i' }}</div>
+            </div>
+        {% empty %}
+            <p style="color:#94a3b8;">No activity logs yet.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

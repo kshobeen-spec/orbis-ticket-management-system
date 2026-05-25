@@ -1,0 +1,235 @@
+{% extends "support/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    body {
+        background: radial-gradient(circle at top, #020617, #020617 40%, #000);
+        font-family: 'Inter', sans-serif;
+        color: #e5e7eb;
+        margin: 0;
+    }
+
+    .profile-container {
+        max-width: 900px;
+        margin: 70px auto;
+        background: #020617;
+        border-radius: 18px;
+        padding: 48px;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.7);
+    }
+
+    .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        border-bottom: 1px solid #1e293b;
+        padding-bottom: 28px;
+    }
+
+    .avatar {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        background: #1e293b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 42px;
+        font-weight: 600;
+        color: #94a3b8;
+    }
+
+    .profile-header h2 {
+        margin: 0;
+        font-size: 28px;
+    }
+
+    .profile-header p {
+        margin-top: 6px;
+        color: #94a3b8;
+        font-size: 15px;
+    }
+
+    .profile-section {
+        margin-top: 36px;
+    }
+
+    .profile-section h3 {
+        font-size: 20px;
+        margin-bottom: 18px;
+        padding-left: 12px;
+        border-left: 4px solid #6366f1;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 26px;
+    }
+
+    .info-item span {
+        font-size: 13px;
+        color: #94a3b8;
+    }
+
+    .info-item p {
+        margin-top: 6px;
+        font-size: 15px;
+    }
+
+    .empty-text {
+        color: #94a3b8;
+        font-size: 14px;
+        margin-top: 8px;
+    }
+
+    .profile-actions {
+        margin-top: 48px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .edit-btn {
+        background: #6366f1;
+        color: white;
+        border: none;
+        padding: 12px 28px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .edit-btn:hover {
+        background: #4f46e5;
+    }
+
+    .logout-btn {
+        color: #f87171;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    .logout-btn:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .profile-actions {
+            flex-direction: column;
+            gap: 18px;
+            align-items: flex-start;
+        }
+    }
+</style>
+
+<div class="profile-container">
+
+    <!-- HEADER -->
+    <div class="profile-header">
+        <div class="avatar">
+            {% if request.user.profile.profile_photo %}
+                <img src="{{ request.user.profile.profile_photo.url }}" alt="Profile Photo" style="width:110px; height:110px; border-radius:50%; object-fit:cover;">
+            {% else %}
+                {{ request.user.username|first|upper }}
+            {% endif %}
+        </div>
+        <div>
+            <h2>{{ request.user.username }}</h2>
+            <p>{{ request.user.email }}</p>
+        </div>
+    </div>
+
+    <!-- PERSONAL DETAILS -->
+    <div class="profile-section">
+        <h3>Personal Details</h3>
+        <div class="info-grid">
+            <div class="info-item">
+                <span>Phone</span>
+                <p>{% if request.user.profile.phone %}{{ request.user.profile.phone }}{% else %}Not added{% endif %}</p>
+            </div>
+            <div class="info-item">
+                <span>Bio</span>
+                <p>{% if request.user.profile.bio %}{{ request.user.profile.bio }}{% else %}No bio added yet.{% endif %}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- TICKETS -->
+    <div class="profile-section">
+        <h3>Your Tickets</h3>
+        {% if request.user.tickets.all %}
+            <div style="display: grid; gap: 12px;">
+                {% for ticket in request.user.tickets.all %}
+                    <a href="{% url 'ticket_detail' ticket.id %}" style="text-decoration: none; color: inherit;">
+                        <div style="padding: 16px; background: #1a1a2e; border-radius: 8px; border-left: 4px solid #6366f1; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#222';" onmouseout="this.style.background='#1a1a2e';">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <strong style="color: #fff;">#{{ ticket.id }} - {{ ticket.title }}</strong>
+                                <span style="background: {% if ticket.status == 'open' %}#6366f1{% elif ticket.status == 'in_progress' %}#f59e0b{% elif ticket.status == 'resolved' %}#10b981{% else %}#6b7280{% endif %}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">{{ ticket.get_status_display }}</span>
+                            </div>
+                            <small style="color: #94a3b8; display: block; margin-top: 6px;">{{ ticket.created_at|date:'M d, Y H:i' }}</small>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="empty-text">You haven't raised any tickets yet. <a href="{% url 'ticket_create' %}" style="color: #6366f1; text-decoration: none;">Create one now</a></p>
+        {% endif %}
+    </div>
+
+    <!-- PURCHASED SERVICES -->
+    <div class="profile-section">
+        <h3>Purchased Services</h3>
+        {% if request.user.purchased_services.all %}
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px;">
+                {% for purchase in request.user.purchased_services.all %}
+                    <div style="padding: 16px; background: #1a1a2e; border-radius: 8px; border: 1px solid #6366f1;">
+                        <h4 style="margin: 0 0 8px 0; color: #fff;">{{ purchase.service.name }}</h4>
+                        <small style="color: #94a3b8; display: block; margin-bottom: 8px;">{{ purchase.service.get_plan_display }} Plan</small>
+                        <p style="color: #cbd5e1; margin: 8px 0; font-size: 14px;">{{ purchase.service.description }}</p>
+                        <div style="color: #10b981; font-weight: bold; margin-top: 8px;">✓ Active</div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="empty-text">No purchased services yet. <a href="{% url 'services' %}" style="color: #6366f1; text-decoration: none;">Browse available services</a></p>
+        {% endif %}
+    </div>
+
+    <!-- SUBSCRIBED SERVICES -->
+    <div class="profile-section">
+        <h3>Subscribed Services</h3>
+        {% if request.user.profile.services.all %}
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px;">
+                {% for service in request.user.profile.services.all %}
+                    <div style="padding: 16px; background: #1a1a2e; border-radius: 8px; border: 1px solid #94a3b8;">
+                        <h4 style="margin: 0 0 8px 0; color: #fff;">{{ service.name }}</h4>
+                        <small style="color: #94a3b8; display: block; margin-bottom: 8px;">{{ service.get_plan_display }} Plan</small>
+                        <p style="color: #cbd5e1; margin: 8px 0; font-size: 14px;">{{ service.description }}</p>
+                        <div style="color: #94a3b8; font-weight: bold; margin-top: 8px;">★ Favorited</div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="empty-text">No subscribed services. <a href="{% url 'services' %}" style="color: #6366f1; text-decoration: none;">Browse available services</a></p>
+        {% endif %}
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="profile-actions">
+        <a href="{% url 'profile_edit' %}" class="edit-btn">Edit Profile</a>
+        <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+    </div>
+
+</div>
+
+<script src="{% static 'js/profile.js' %}"></script>
+
+{% endblock %}
