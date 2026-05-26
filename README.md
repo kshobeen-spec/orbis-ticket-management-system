@@ -39,7 +39,7 @@ ORBiS is a service support and ticket management system developed for managing s
 # Screenshots
 
 ## Home Page
-![Home Page](orbis_project/orbis_project/screenshots/home)
+![Home Page](orbis_project/orbis_project/screenshots/home.png)
 
 ---
 
@@ -54,68 +54,68 @@ ORBiS is a service support and ticket management system developed for managing s
 ---
 
 ## Ticket Board
-![Ticket Board](orbis_project/orbis_project/screenshots/ticket-board)
+![Ticket Board](orbis_project/orbis_project/screenshots/ticket-board.png)
 
 ---
 
 ## Admin Panel
-![Admin Panel](orbis_project/orbis_project/screenshots/admin-panel)
+![Admin Panel](orbis_project/orbis_project/screenshots/admin-panel.png)
 
 ---
 
 ## Admin Profile
-![Admin Profile](orbis_project/orbis_project/screenshots/admin_profile)
+![Admin Profile](orbis_project/orbis_project/screenshots/admin_profile.png)
 
 ---
 
 ## Admin Services
-![Admin Services](orbis_project/orbis_project/screenshots/admin-services)
+![Admin Services](orbis_project/orbis_project/screenshots/admin-services.png)
 
 ---
 
 ## Admin Tickets
-![Admin Tickets](orbis_project/orbis_project/screenshots/admin-tickets)
+![Admin Tickets](orbis_project/orbis_project/screenshots/admin-tickets.png)
 
 ---
 
 ## Internal Notes
-![Internal Notes](orbis_project/orbis_project/screenshots/internal-notes)
+![Internal Notes](orbis_project/orbis_project/screenshots/internal-notes.png)
 
 ---
 
 ## Ticket Conversations
-![Conversation 1](orbis_project/orbis_project/screenshots/eg-ticket_convo)
+![Conversation 1](orbis_project/orbis_project/screenshots/eg-ticket_convo.png)
 
-![Conversation 2](orbis_project/orbis_project/screenshots/eg-ticket_convo2)
+![Conversation 2](orbis_project/orbis_project/screenshots/eg-ticket_convo2.png)
 
 ---
 
 ## Ticket Replies
-![Ticket Replies](orbis_project/orbis_project/screenshots/ticketreplies)
+![Ticket Replies](orbis_project/orbis_project/screenshots/ticketreplies.png)
 
 ---
 
 ## User Profile
-![Profile](orbis_project/orbis_project/screenshots/profile)
+![Profile](orbis_project/orbis_project/screenshots/profile.png)
 
-![Profile 2](orbis_project/orbis_project/screenshots/profile-2)
+![Profile 2](orbis_project/orbis_project/screenshots/profile-2.png)
 
 ---
 
 ## Services
-![Service](orbis_project/orbis_project/screenshots/service)
+![Service](orbis_project/orbis_project/screenshots/service.png)
 
-![Service 2](orbis_project/orbis_project/screenshots/service2)
+![Service 2](orbis_project/orbis_project/screenshots/service2.png)
 
 ---
 
 ## Help Center
-![Help Center](orbis_project/orbis_project/screenshots/helpcenter)
+![Help Center](orbis_project/orbis_project/screenshots/helpcenter.png)
 
 ---
 
 ## About Page
-![About](orbis_project/orbis_project/screenshots/about)
+![About](orbis_project/orbis_project/screenshots/about.png)
 
 ---
 
