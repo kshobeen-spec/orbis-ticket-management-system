@@ -44,22 +44,22 @@ ORBiS is a service support and ticket management system developed for managing s
 ---
 
 ## Login Page
-![Login](screenshots/login)
+![Login](orbis_project/orbis_project/screenshots/screenshots/login.png)
 
 ---
 
 ## Dashboard
-![Dashboard](screenshots/dashboard)
+![Dashboard](orbis_project/orbis_project/screenshots/screenshots/dashboard.png)
 
 ---
 
 ## Ticket Board
-![Ticket Board](screenshots/ticket-board)
+![Ticket Board](orbis_project/orbis_project/screenshots/screenshots/ticket-board)
 
 ---
 
 ## Admin Panel
-![Admin Panel](screenshots/admin-panel)
+![Admin Panel](orbis_project/orbis_project/screenshots/screenshots/admin-panel)
 
 ---
 
