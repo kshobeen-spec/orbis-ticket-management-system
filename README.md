@@ -64,7 +64,7 @@ ORBiS is a service support and ticket management system developed for managing s
 ---
 
 ## Admin Profile
-![Admin Profile](screenshots/admin_profile.png)
+![Admin Profile](orbis_project/orbis_project/screenshots/admin_profile.png)
 
 ---
 
@@ -74,48 +74,48 @@ ORBiS is a service support and ticket management system developed for managing s
 ---
 
 ## Admin Tickets
-![Admin Tickets](screenshots/admin-tickets.png)
+![Admin Tickets](orbis_project/orbis_project/screenshots/admin-tickets.png)
 
 ---
 
 ## Internal Notes
-![Internal Notes](screenshots/internal-notes.png)
+![Internal Notes](orbis_project/orbis_project/screenshots/internal-notes.png)
 
 ---
 
 ## Ticket Conversations
-![Conversation 1](screenshots/eg-ticket_convo.png)
+![Conversation 1](orbis_project/orbis_project/screenshots/eg-ticket_convo.png)
 
-![Conversation 2](screenshots/eg-ticket_convo2.png)
+![Conversation 2](orbis_project/orbis_project/screenshots/eg-ticket_convo2.png)
 
 ---
 
 ## Ticket Replies
-![Ticket Replies](screenshots/ticketreplies.png)
+![Ticket Replies](orbis_project/orbis_project/screenshots/ticketreplies.png)
 
 ---
 
 ## User Profile
-![Profile](screenshots/profile.png)
+![Profile](orbis_project/orbis_project/screenshots/profile.png)
 
-![Profile 2](screenshots/profile-2.png)
+![Profile 2](orbis_project/orbis_project/screenshots/profile-2.png)
 
 ---
 
 ## Services
-![Service](screenshots/service.png)
+![Service](orbis_project/orbis_project/screenshots/service.png)
 
-![Service 2](screenshots/service2.png)
+![Service 2](orbis_project/orbis_project/screenshots/service2.png)
 
 ---
 
 ## Help Center
-![Help Center](screenshots/helpcenter.png)
+![Help Center](orbis_project/orbis_project/screenshots/helpcenter.png)
 
 ---
 
 ## About Page
-![About](screenshots/about.png)
+![About](orbis_project/orbis_project/screenshots/about.png)
 
 ---
 
