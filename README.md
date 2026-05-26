@@ -39,27 +39,27 @@ ORBiS is a service support and ticket management system developed for managing s
 # Screenshots
 
 ## Home Page
-![Home Page](screenshots/home)
+![Home Page](orbis_project/orbis_project/screenshots/home)
 
 ---
 
 ## Login Page
-![Login](orbis_project/orbis_project/screenshots/screenshots/login.png)
+![Login](orbis_project/orbis_project/screenshots/login.png)
 
 ---
 
 ## Dashboard
-![Dashboard](orbis_project/orbis_project/screenshots/screenshots/dashboard.png)
+![Dashboard](orbis_project/orbis_project/screenshots/dashboard.png)
 
 ---
 
 ## Ticket Board
-![Ticket Board](orbis_project/orbis_project/screenshots/screenshots/ticket-board)
+![Ticket Board](orbis_project/orbis_project/screenshots/ticket-board)
 
 ---
 
 ## Admin Panel
-![Admin Panel](orbis_project/orbis_project/screenshots/screenshots/admin-panel)
+![Admin Panel](orbis_project/orbis_project/screenshots/admin-panel)
 
 ---
 
@@ -69,7 +69,7 @@ ORBiS is a service support and ticket management system developed for managing s
 ---
 
 ## Admin Services
-![Admin Services](screenshots/admin-services)
+![Admin Services](orbis_project/orbis_project/screenshots/admin-services)
 
 ---
 
