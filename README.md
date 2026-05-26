@@ -39,83 +39,83 @@ ORBiS is a service support and ticket management system developed for managing s
 # Screenshots
 
 ## Home Page
-![Home Page](screenshots/home.png)
+![Home Page](screenshots/home)
 
 ---
 
 ## Login Page
-![Login](screenshots/login.png)
+![Login](screenshots/login)
 
 ---
 
 ## Dashboard
-![Dashboard](screenshots/dashboard.png)
+![Dashboard](screenshots/dashboard)
 
 ---
 
 ## Ticket Board
-![Ticket Board](screenshots/ticket-board.png)
+![Ticket Board](screenshots/ticket-board)
 
 ---
 
 ## Admin Panel
-![Admin Panel](screenshots/admin-panel.png)
+![Admin Panel](screenshots/admin-panel)
 
 ---
 
 ## Admin Profile
-![Admin Profile](orbis_project/orbis_project/screenshots/admin_profile.png)
+![Admin Profile](orbis_project/orbis_project/screenshots/admin_profile)
 
 ---
 
 ## Admin Services
-![Admin Services](screenshots/admin-services.png)
+![Admin Services](screenshots/admin-services)
 
 ---
 
 ## Admin Tickets
-![Admin Tickets](orbis_project/orbis_project/screenshots/admin-tickets.png)
+![Admin Tickets](orbis_project/orbis_project/screenshots/admin-tickets)
 
 ---
 
 ## Internal Notes
-![Internal Notes](orbis_project/orbis_project/screenshots/internal-notes.png)
+![Internal Notes](orbis_project/orbis_project/screenshots/internal-notes)
 
 ---
 
 ## Ticket Conversations
-![Conversation 1](orbis_project/orbis_project/screenshots/eg-ticket_convo.png)
+![Conversation 1](orbis_project/orbis_project/screenshots/eg-ticket_convo)
 
-![Conversation 2](orbis_project/orbis_project/screenshots/eg-ticket_convo2.png)
+![Conversation 2](orbis_project/orbis_project/screenshots/eg-ticket_convo2)
 
 ---
 
 ## Ticket Replies
-![Ticket Replies](orbis_project/orbis_project/screenshots/ticketreplies.png)
+![Ticket Replies](orbis_project/orbis_project/screenshots/ticketreplies)
 
 ---
 
 ## User Profile
-![Profile](orbis_project/orbis_project/screenshots/profile.png)
+![Profile](orbis_project/orbis_project/screenshots/profile)
 
-![Profile 2](orbis_project/orbis_project/screenshots/profile-2.png)
+![Profile 2](orbis_project/orbis_project/screenshots/profile-2)
 
 ---
 
 ## Services
-![Service](orbis_project/orbis_project/screenshots/service.png)
+![Service](orbis_project/orbis_project/screenshots/service)
 
-![Service 2](orbis_project/orbis_project/screenshots/service2.png)
+![Service 2](orbis_project/orbis_project/screenshots/service2)
 
 ---
 
 ## Help Center
-![Help Center](orbis_project/orbis_project/screenshots/helpcenter.png)
+![Help Center](orbis_project/orbis_project/screenshots/helpcenter)
 
 ---
 
 ## About Page
-![About](orbis_project/orbis_project/screenshots/about.png)
+![About](orbis_project/orbis_project/screenshots/about)
 
 ---
 
